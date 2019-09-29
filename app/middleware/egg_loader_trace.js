@@ -6,6 +6,7 @@ const utility = require('utility');
 
 module.exports = (_, app) => {
   return async (ctx, next) => {
+    // 拦截__loader_trace__，响应lib/loader_trace.html信息
     if (ctx.path !== '/__loader_trace__') return await next();
     const template = await fs.readFile(path.join(__dirname, '../../lib/loader_trace.html'), 'utf8');
     const data = await loadTimingData(app);

@@ -43,6 +43,8 @@ module.exports = agent => {
   ].concat(config.ignoreDirs).map(dir => path.join(baseDir, dir));
 
   // watch dirs to reload worker, will debounce 200ms
+  // 基于egg-watcher来监听文件
+  // debounce来防抖
   agent.watcher.watch(watchDirs, debounce(reloadWorker, 200));
 
   /**
@@ -71,7 +73,7 @@ module.exports = agent => {
     }
 
     logger.warn(`[agent:development] reload worker because ${info.path} ${info.event}`);
-
+    // 给master进程发送消息
     process.send({
       to: 'master',
       action: 'reload-worker',

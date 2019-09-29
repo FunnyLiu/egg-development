@@ -1,28 +1,35 @@
 # egg-development
 
-[![NPM version][npm-image]][npm-url]
-[![build status][travis-image]][travis-url]
-[![Test coverage][codecov-image]][codecov-url]
-[![David deps][david-image]][david-url]
-[![Known Vulnerabilities][snyk-image]][snyk-url]
-[![npm download][download-image]][download-url]
-
-[npm-image]: https://img.shields.io/npm/v/egg-development.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/egg-development
-[travis-image]: https://img.shields.io/travis/eggjs/egg-development.svg?style=flat-square
-[travis-url]: https://travis-ci.org/eggjs/egg-development
-[codecov-image]: https://img.shields.io/codecov/c/github/eggjs/egg-development.svg?style=flat-square
-[codecov-url]: https://codecov.io/github/eggjs/egg-development?branch=master
-[david-image]: https://img.shields.io/david/eggjs/egg-development.svg?style=flat-square
-[david-url]: https://david-dm.org/eggjs/egg-development
-[snyk-image]: https://snyk.io/test/npm/egg-development/badge.svg?style=flat-square
-[snyk-url]: https://snyk.io/test/npm/egg-development
-[download-image]: https://img.shields.io/npm/dm/egg-development.svg?style=flat-square
-[download-url]: https://npmjs.org/package/egg-development
-
 This is an egg plugin for local development, under development environment enabled by default, and closed under other environment.
 
-`egg-development` has been built-in for egg. It is enabled by default.
+# 源码分析
+
+__loader_trace__显示追踪调用数据，agent基于egg-watcher模块挂载的ctx.watcher开启文件监听，通过process.send给master进程发消息。app简单的增加中间件。
+
+## 文件结构
+
+``` bash
+├── agent.js - 通过egg-watcher来监听文件变化，通过process.send给master发消息。
+├── app
+|  └── middleware
+|     └── egg_loader_trace.js -- 增加中间件，拦截__loader_trace__，响应lib/loader_trace.html信息
+├── app.js - 将eggLoaderTrace加到config.coreMiddlewares中
+├── config
+|  └── config.default.js
+├── lib
+|  └── loader_trace.html - 追踪数据的模板文件
+├── package.json
+
+```
+
+## 外部模块依赖
+
+![](./graphviz/module.svg)
+
+## 逐个文件分析
+
+
+
 
 
 ## Configuration
